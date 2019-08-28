@@ -38,9 +38,9 @@
                         <tr>
                             <td style="text-align:center; margin-top:10px; word-break:break-all; width:450px; line-height:100px;">
                                 <?php if($photo['image'] != ""): ?>
-                                <img src="{{ URL::asset('/image'.$photo->image) }}" width="100px" height="100px" style="border:1px solid #333333;">
+                                <img src="{{ asset('image/' . $photo->image) }}" width="100px" height="100px" style="border:1px solid #333333;">
                                 <?php else: ?>
-                                <img src="images/default.png" width="100px" height="100px" style="border:1px solid #333333;">
+                                <img src="image/default.png" width="100px" height="100px" style="border:1px solid #333333;">
                                 <?php endif; ?>
                             </td>
                         </tr>
