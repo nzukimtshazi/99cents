@@ -18,8 +18,8 @@ class PhotoController extends Controller
     public function index(Request $request)
     {
         $user = User::where('id', '=', $request->user_id)->first();
-        $photos = Photo::where('user_id', '=', $user)->get();
-        return view('photo.index', compact('photos', 'user'));
+        $photos = Photo::where('user_id', '=', $user->id)->get();
+        return view('photo.index', compact('user', 'photos'));
     }
 
     public function upload(Request $request)
@@ -35,16 +35,29 @@ class PhotoController extends Controller
      */
     public function store(Request $request)
     {
-        $photo = new Photo();
-        $photo->user_id = $request->user_id;
-        $cnt = $photo->photo_ref;
-        $cnt = $cnt + 1;
-        $photo->photo_ref = $cnt;
-        $photo->photo = $request->file('user_photo');
-
-        if ($photo->save()) {
-            $message = 'Successfully added photo!';
-            return Redirect::back()->withInput()->withErrors(array('user' => $message));
+        request()->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+        if ($files = $request->file('image')) {
+            $destinationPath = 'image/'; // upload path
+            $profileImage = date('YmdHis') . "." . $files->getClientOriginalExtension();
+            $files->move($destinationPath, $profileImage);
+            $insert['user_id'] = $request->user_id;
+            $insert['image'] = "$profileImage";
         }
+        $check = Photo::insertGetId($insert);
+
+        return Redirect::back()->withSuccess('Image has been successfully uploaded.');
+    }
+
+    /**
+     * Search a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function search()
+    {
+        //
     }
 }

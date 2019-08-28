@@ -36,3 +36,6 @@ Route::get('photo/upload', ['as' => 'photo.upload','uses' => 'PhotoController@up
 
 // store photos
 Route::post('photo/store', ['as' => 'photo.store','uses' => 'PhotoController@store']);
+
+// search photos
+Route::get('photo/search', ['as' => 'photo.search','uses' => 'PhotoController@search']);

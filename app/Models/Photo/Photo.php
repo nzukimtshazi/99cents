@@ -25,7 +25,7 @@ class Photo extends Model implements AuthenticatableContract,
      *
      * @var array
      */
-    protected $fillable = ['user_id', 'photo_ref', 'photo'];
+    protected $fillable = ['user_id', 'image'];
 
     /**
      * The attributes excluded from the model's JSON form.

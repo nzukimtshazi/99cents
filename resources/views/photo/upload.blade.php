@@ -1,35 +1,92 @@
 <!DOCTYPE html>
-<!-- app/resources/views/contact/index.blade.php -->
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>99cents Gallery</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" />
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
 
-@extends('layout/layout')
+    <style>
+        .container{
+            padding: 10%;
+            text-align: center;
+        }
 
-<html lang="en">
+    </style>
+</head>
+<body>
 
-<!-- Current Users -->
+<div class="container">
+    <h2 style="margin-left: -48px;">Uploading Photos</h2>
+    <br>
+    @if ($message = Session::get('success'))
+        <div class="alert alert-success alert-block">
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <div class="row">
-                <div class="col-xs-6">
-                    <h4>Uploading photos</h4>
-                </div>
-            </div>
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <strong>{{ $message }}</strong>
 
-            {{Form::open(['route' => 'photo.store', 'files' => true])}}
+        </div><br>
+    @endif
+    @if (count($errors) > 0)
 
-            <div class="row">
-                <div class="col-sm-12 col-md-12">
-                    <div class="col-sm-4 col-md-4">
-                        {{ Form::hidden('user_id', $user_id) }}
-                    </div>
-                </div>
-            </div>
+        <div class="alert alert-danger">
 
-            {{Form::label('user_photo', 'User Photo',['class' => 'control-label'])}}
-            {{Form::file('user_photo')}}
-            {{Form::submit('Save', ['class' => 'btn btn-success'])}}
+            <strong>Opps!</strong> Something went wrong.
+            <ul>
+            @foreach ($errors->all() as $error)
 
-            {{Form::close()}}
+                <li>{{ $error }}</li>
+
+            @endforeach
+
+            </ul>
+
         </div>
-    </div>
+        <br>
+    @endif
+    <form action="{{ url('photo/store') }}" method="post" accept-charset="utf-8" enctype="multipart/form-data">
+        @csrf
+        <div class="avatar-upload col-12">
+            <div class="avatar-edit">
+                <input type='file' id="image" name="image" onchange="readURL(this);" accept=".png, .jpg, .jpeg" />
+                <label for="imageUpload"></label>
+                {{--<img id="blah" src="https://www.tutsmake.com/wp-content/uploads/2019/01/no-image-tut.png" class="" width="200" height="150"/>--}}
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <div class="col-sm-4 col-md-4">
+                    {{ Form::hidden('user_id', $user_id) }}
+                </div>
+            </div>
+        </div>
+        <div class="avatar-upload col-6">
+            <button type="submit" class="btn btn-success">Submit</button>
+            <a href="{!!URL::route('user.login')!!}" class="btn btn-info" role="button">Cancel</a>
+        </div>
+    </form>
+</div>
+<script>
+    function readURL(input, id) {
+        id = id || '#blah';
+        if (input.files &amp;&amp; input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $(id)
+                        .attr('src', e.target.result)
+                        .width(200)
+                        .height(150);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+</body>
 </html>
