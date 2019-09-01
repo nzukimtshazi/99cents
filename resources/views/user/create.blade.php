@@ -1,56 +1,71 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>99cents</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" />
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+@extends('layouts.app')
 
-    <style>
-        .container{
-            padding: 5%;
-            text-align: left;
-        }
+@section('content')
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">{{ __('Create New User') }}</div>
 
-    </style>
-</head>
-<body>
+                    <div class="card-body">
+                        <form method="POST" action="{{ route('user.store') }}">
+                            @csrf
 
-<div>{{{ $errors->first('email') }}}</div>
+                            <div class="form-group row">
+                                <label for="firstname" class="col-md-4 col-form-label text-md-right">{{ __('Firstname') }}</label>
 
-<div class="container">
-    <h3 style="margin-left: -48px;">Create New User</h3>
-    <br>
-    {!! Form::model(new App\Models\User\User, ['route' => ['user.store']]) !!}
+                                <div class="col-md-6">
+                                    <input id="firstname" type="text" class="form-control" name="firstname" value="{{ old('firstname') }}" required>
+                                </div>
+                            </div>
 
-    <div class="form-group">
-        {!! Form::label('firstname', 'Firstname') !!}
-        {!! Form::text('firstname', Request::old('firstname'), array('class' => 'form-control', 'required')) !!}
-    </div><br>
+                            <div class="form-group row">
+                                <label for="surname" class="col-md-4 col-form-label text-md-right">{{ __('Surname') }}</label>
 
-    <div class="form-group">
-        {!! Form::label('surname', 'Surname') !!}
-        {!! Form::text('surname', Request::old('surname'), array('class' => 'form-control', 'required')) !!}
-    </div><br>
+                                <div class="col-md-6">
+                                    <input id="surname" type="text" class="form-control" name="surname" value="{{ old('surname') }}" required>
+                                </div>
+                            </div>
 
-    <div class="form-group">
-        {!! Form::label('email', 'Email') !!}
-        {!! Form::email('email', Request::old('email'), array('class' => 'form-control', 'required')) !!}
-    </div><br>
+                            <div class="form-group row">
+                                <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
 
-    <div class="form-group">
-        {!! Form::label('password', 'Password') !!}
-        {!! Form::text('password', Request::old('password'), array('class' => 'form-control', 'required')) !!}
-    </div><br>
+                                <div class="col-md-6">
+                                    <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
 
-    <a href="{!!URL::route('user.login')!!}" class="btn btn-info" role="button">Cancel</a>
-    {!! Form::submit('Create', array('class' => 'btn btn-primary')) !!}
+                                    @error('email')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
+                            </div>
 
+                            <div class="form-group row">
+                                <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
 
-    {!! Form::close() !!}
-</div>
-</body>
-</html>
+                                <div class="col-md-6">
+                                    <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
+
+                                    @error('password')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group row mb-0">
+                                <div class="col-md-8 offset-md-4">
+                                    <a href="{!!URL::route('user.login')!!}" class="btn btn-info" role="button">Cancel</a>
+                                    {!! Form::submit('Create', array('class' => 'btn btn-primary')) !!}
+
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection

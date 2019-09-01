@@ -17,12 +17,12 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header">{{ __('Uploaded photos') }}</div>
+                    <div class="card-header">{{ __('Uploaded photos for: ') }} {{ $user->firstname }} {{ $user->surname }}</div>
 
                     <div class="col-xs-12 text-right">
-                        <a href="{!!URL::route('photo.upload',['user_id' => $user->id])!!}" class="btn btn-edit">Upload Photo</a>
-                        <a href="{!!URL::route('user.search')!!}" class="btn btn-info" role="button">Search</a>
-                        <a href="{!!URL::route('user.login')!!}" class="btn btn-default">Back</a>
+                        {{--<a href="{!!URL::route('photo.upload',['user_id' => $user->id])!!}" class="btn btn-edit">Upload Photo</a>
+                        <a href="{!!URL::route('user.search')!!}" class="btn btn-info" role="button">Search</a>--}}
+                        <a href="{!!URL::route('photos')!!}" class="btn btn-default">Back</a>
                     </div>
 
                     @if ($message = Session::get('success'))
@@ -39,32 +39,18 @@
 
                             @if (count($photos) > 0)
                                 <tbody>
-                                    <?php
-                                    $count = 0;
-                                    ?>
-                                    <?php foreach ($photos as $photo) { ?>
-                                        <?php
-                                        if($count == 6)
-                                        {
-                                            print "</tr>";
-                                            $count = 0;
-                                        }
-                                        if ($count == 0)
-                                        {
-                                            print "<tr>";
-                                            print "<td>";
-                                        }
-                                        ?>
-                                        <img src="{{ asset('image/' . $photo->image) }}" width="100px" height="100px" style="border:1px solid #333333;">
-                                        <?php
-                                        $count++;
-                                        print "</td>";
-                                        ?>
-                                    <?php }  ?>
-                                    <?php
-                                    if ($count > 0)
-                                        print "</tr>";
-                                    ?>
+                                <?php $s = 0 ?>
+                                @foreach ($photos as $photo)
+                                    <td style="text-align:center; margin-top:10px; word-break:break-all; width:450px; line-height:100px;">
+                                        <?php if($photo['image'] != ""): ?>
+                                        <a target="_blank" href="$photo->image">
+                                            <img src="{{ asset('image/' . $photo->image) }}" width="100px" height="100px" style="border:1px solid #333333;">
+                                        </a>
+                                        <?php else: ?>
+                                        <img src="image/default.png" width="100px" height="100px" style="border:1px solid #333333;">
+                                        <?php endif; ?>
+                                    </td>
+                                @endforeach
                                 </tbody>
                             @else
                                 <div class="alert alert-info" role="alert">No photos have been uploaded</div>

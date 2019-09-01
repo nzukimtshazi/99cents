@@ -39,7 +39,7 @@ class Photo extends Model implements AuthenticatableContract,
 
         $instance = new static;
 
-        return $instance->newQuery()->orderBy('photo_ref')->get($columns);
+        return $instance->newQuery()->orderBy('image')->get($columns);
     }
 
 

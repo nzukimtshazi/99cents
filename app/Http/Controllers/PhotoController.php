@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Photo\Photo;
 use App\Models\User\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Image;
 
@@ -15,11 +17,11 @@ class PhotoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $user = User::where('id', '=', $request->user_id)->first();
-        $photos = Photo::where('user_id', '=', $user->id)->get();
-        return view('photo.index', compact('user', 'photos'));
+        $user = User::where('id', '=', Auth::user()->id)->first();
+        $photos = Photo::all();
+        return view('photo.index', compact('photos', 'user'));
     }
 
     public function upload(Request $request)
@@ -42,22 +44,27 @@ class PhotoController extends Controller
             $destinationPath = 'image/'; // upload path
             $profileImage = date('YmdHis') . "." . $files->getClientOriginalExtension();
             $files->move($destinationPath, $profileImage);
-            $insert['user_id'] = $request->user_id;
-            $insert['image'] = "$profileImage";
-        }
-        $check = Photo::insertGetId($insert);
 
-        return Redirect::back()->withSuccess('Image has been successfully uploaded.');
+            $photo = new Photo();
+            $photo->user_id = $request->user_id;
+            $photo->image = "$profileImage";
+        }
+        if ($photo->save()) {
+            return Redirect::back()->withSuccess('Image has been successfully uploaded.');
+        }
     }
 
     /**
-     * Search a newly created resource in storage.
+     * Return resources from storage.
      *
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function search()
     {
-        //
+        $user = User::where('firstname', '=', Input::get('firstname'))
+            ->where('surname', '=', Input::get('surname'))->first();
+        $photos = Photo::where('user_id', '=', $user->id)->get();
+        return view('photo.searchedphotos', compact('user', 'photos'));
     }
 }
