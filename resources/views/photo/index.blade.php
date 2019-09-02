@@ -42,9 +42,9 @@
                                     <?php
                                     $count = 0;
                                     ?>
-                                    <?php foreach ($photos as $photo) { ?>
+                                    @foreach ($photos as $photo)
                                         <?php
-                                        if($count == 6)
+                                        if($count == 5)
                                         {
                                             print "</tr>";
                                             $count = 0;
@@ -55,12 +55,14 @@
                                             print "<td>";
                                         }
                                         ?>
-                                        <img src="{{ asset('image/' . $photo->image) }}" width="100px" height="100px" style="border:1px solid #333333;">
+                                        <a target="_blank" href="{!! URL::route('image.thumbnail',[$photo->id]) !!}">
+                                            <img src="{{ asset('image/' . $photo->image) }}" width="100px" height="100px" style="border:1px solid #333333;">
+                                        </a>
                                         <?php
                                         $count++;
                                         print "</td>";
                                         ?>
-                                    <?php }  ?>
+                                    @endforeach
                                     <?php
                                     if ($count > 0)
                                         print "</tr>";

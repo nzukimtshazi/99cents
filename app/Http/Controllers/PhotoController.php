@@ -67,4 +67,10 @@ class PhotoController extends Controller
         $photos = Photo::where('user_id', '=', $user->id)->get();
         return view('photo.searchedphotos', compact('user', 'photos'));
     }
+
+    public function thumbnail($id)
+    {
+        $photo = Photo::where('id', '=', $id)->first();
+        return view('photo.thumbnail', compact('photo'));
+    }
 }

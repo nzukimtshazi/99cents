@@ -45,3 +45,6 @@ Route::get('user/search', ['as' => 'user.search','uses' => 'UserController@searc
 
 // return photos for the searched user
 Route::get('photo/search', ['as' => 'photo.search','uses' => 'PhotoController@search']);
+
+// edit image thumbnail
+Route::get('image/thumbnail/{id}', ['as' => 'image.thumbnail','uses' => 'PhotoController@thumbnail']);
